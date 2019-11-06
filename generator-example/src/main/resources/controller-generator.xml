@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--自定义 父节点-->
+<beans>
+    <basePackage>com.basepackage</basePackage>
+    <domainName>kk,person,user,accord,stock,test</domainName>
+    <projectName>platform</projectName>
+    <outputDir>C:\Users\admin\Desktop</outputDir>
+</beans>

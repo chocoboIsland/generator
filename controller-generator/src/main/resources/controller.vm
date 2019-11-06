@@ -1,0 +1,106 @@
+package ${controllerPackage};
+
+import ${dtoPackage}.AjaxResponse;
+import ${dtoPackage}.${dtoClass};
+import ${servicePackage}.${serviceObject};
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+ctx.put("controllerClass",projectName+domainUp+"Controller");
+ctx.put("serviceClass",projectName+domainUp+"Service");
+ctx.put("serviceObject",projectName+domainName+"Service");
+ctx.put("daoClass",projectName+domainUp+"Dao");
+ctx.put("daoObject",projectName+domainName+"Dao");
+ctx.put("dtoClass",projectName+domainUp+"Dto");
+ctx.put("dtoObject",projectName+domainName+"Dto");
+ctx.put("domain",domainName);
+
+
+
+@Slf4j
+@RestController
+@RequestMapping("/${domain}s")
+public class ${controllerClass} {
+
+    @Autowired
+    ${serviceClass} ${serviceObject};
+
+    @PostMapping(value = "/v1" ,produces = "application/json;charset=UTF-8" )
+    public AjaxResponse insert(@RequestBody ${dtoClass} ${dtoObject})
+    {
+        ${serviceObject}.insert(${dtoObject});
+        AjaxResponse ajaxResponse=new AjaxResponse();
+        ajaxResponse.setOk(true);
+        ajaxResponse.setMessage("insert date succeed");
+        ajaxResponse.setCode(200);
+        return ajaxResponse;
+    }
+
+    @PostMapping(value = "/_m/v1" ,produces = "application/json;charset=UTF-8" )
+    public AjaxResponse insertList(@RequestBody List<${dtoObject}> ${dtoObject}List)
+    {
+        ${serviceObject}.insertList(${dtoObject}List);
+        AjaxResponse ajaxResponse=new AjaxResponse();
+        ajaxResponse.setOk(true);
+        ajaxResponse.setMessage("insert "+${dtoObject}List.size()+" size of data");
+        ajaxResponse.setCode(200);
+        return ajaxResponse;
+    }
+
+    @DeleteMapping(value="/v1",produces = "application/json;charset=UTF-8")
+    public AjaxResponse deleteAll()
+    {
+        ${serviceObject}.deleteAll();
+        AjaxResponse ajaxResponse=new AjaxResponse();
+        ajaxResponse.setOk(true);
+        ajaxResponse.setMessage("success");
+        ajaxResponse.setCode(200);
+        return ajaxResponse;
+    }
+
+    @PutMapping(value = "/v1",produces = "application/json;charset=UTF-8")
+    public AjaxResponse update(@RequestBody ${dtoObject} ${dtoObject})
+    {
+        AjaxResponse ajaxResponse=new AjaxResponse();
+        try {
+        int result=${serviceObject}.updateByPrimaryKey(${dtoObject});
+        ajaxResponse.setOk(true);
+        ajaxResponse.setMessage("update success");
+        ajaxResponse.setCode(200);
+        } catch (Exception e) {
+        e.printStackTrace();
+        ajaxResponse.setOk(false);
+        ajaxResponse.setMessage(e.getMessage());
+        ajaxResponse.setCode(400);
+        }
+        return ajaxResponse;
+    }
+
+    @GetMapping(value="/id/{id}/v1",produces = "application/json;charset=UTF-8")
+    public AjaxResponse searchById(@PathVariable int id)
+    {
+    ${dtoObject} broker=${serviceObject}.selectByPrimaryKey(id);
+    AjaxResponse ajaxResponse=new AjaxResponse();
+    ajaxResponse.setOk(true);
+    ajaxResponse.setMessage("search success");
+    ajaxResponse.setCode(200);
+    ajaxResponse.setData(broker);
+    return ajaxResponse;
+    }
+
+    @GetMapping(value="/v1",produces = "application/json;charset=UTF-8")
+    public AjaxResponse searchAll()
+    {
+        List<${dtoObject}> ${dtoObject}List=${serviceObject}.selectAll();
+        int size=${dtoObject}List.size();
+        AjaxResponse ajaxResponse=new AjaxResponse();
+        ajaxResponse.setOk(true);
+        ajaxResponse.setMessage("search success,all "+size+" size of data");
+        ajaxResponse.setCode(200);
+        ajaxResponse.setData(${dtoObject}List);
+        return ajaxResponse;
+    }
+}
