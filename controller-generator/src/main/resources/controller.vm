@@ -9,17 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-ctx.put("controllerClass",projectName+domainUp+"Controller");
-ctx.put("serviceClass",projectName+domainUp+"Service");
-ctx.put("serviceObject",projectName+domainName+"Service");
-ctx.put("daoClass",projectName+domainUp+"Dao");
-ctx.put("daoObject",projectName+domainName+"Dao");
-ctx.put("dtoClass",projectName+domainUp+"Dto");
-ctx.put("dtoObject",projectName+domainName+"Dto");
-ctx.put("domain",domainName);
-
-
-
 @Slf4j
 @RestController
 @RequestMapping("/${domain}s")
