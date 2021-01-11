@@ -10,21 +10,21 @@ import org.apache.maven.plugins.annotations.Parameter;
 public class GeneratorMojo extends AbstractMojo {
 
     @Parameter
-    private String configDir;
+    private String generatorConfigDir;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException{
 
-        ControllerVm controllerVm;
-        if (configDir !=null && configDir.trim().length()!=0)
+        GeneratorVm generatorVm;
+        if (generatorConfigDir !=null && generatorConfigDir.trim().length()!=0)
         {
-            controllerVm=new ControllerVm(configDir);
+            generatorVm =new GeneratorVm(generatorConfigDir);
         }else
         {
-            controllerVm=new ControllerVm();
+           throw new IllegalStateException("没有配置文件generatorConfigDir");
         }
         try {
-            controllerVm.createVm();
+            generatorVm.createVm();
         } catch (Exception e) {
             e.printStackTrace();
         }

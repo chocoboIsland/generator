@@ -13,9 +13,7 @@ import java.io.File;
 
 public class ReadConfigXml {
 
-
-    public static final String DEFAULT_CONFIG= "controller-generator.xml";
-    private String configXml=DEFAULT_CONFIG;
+    private String configXml;
 
     /**
      * @return 配置信息的集合

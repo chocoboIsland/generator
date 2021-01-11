@@ -1,0 +1,1 @@
+自己需要修改的有，在mybatis-generator生成的insert中去除id和version，正常有两个，insert和insertSelective

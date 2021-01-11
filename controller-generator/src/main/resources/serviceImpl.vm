@@ -1,77 +1,77 @@
 package ${servicePackage}.impl;
 
-import ${daoPackage}.${daoClass};
-import ${dtoPackage}.${dtoClass};
-import ${servicePackage}.${serviceClass};
+import ${daoPackage}.${daoClassName};
+import ${dtoPackage}.${dtoClassName};
+import ${servicePackage}.${serviceClassName};
 import com.wangpj.platform.util.BaseDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class ${serviceClass}Impl implements ${serviceClass} {
+public class ${serviceClassName}Impl implements ${serviceClassName} {
 
     @Autowired
-    ${daoClass} ${daoObject};
+    ${daoClassName} ${daoObjectName};
 
 @Override
-    public int deleteByPrimaryKey(Integer id) {
-        return ${daoObject}.deleteByPrimaryKey(id);
+    public int deleteByPrimaryKey(Long id) {
+        return ${daoObjectName}.deleteByPrimaryKey(id);
     }
 
     @Override
-    public int insert(${dtoClass} ${dtoObject})
+    public int insert(${dtoClassName} ${dtoObjectName})
     {
-        BaseDtoUtil.create(${dtoObject});
-        return ${daoObject}.insert(${dtoObject});
+        BaseDtoUtil.create(${dtoObjectName});
+        return ${daoObjectName}.insert(${dtoObjectName});
     }
 
     @Override
-    public int insertList(List<${dtoClass}> ${dtoObject}List)
+    public int insertList(List<${dtoClassName}> ${dtoObjectName}List)
     {
-        for (${dtoClass} ${dtoObject}:
-        ${dtoObject}List) {
-        BaseDtoUtil.create(${dtoObject});
-        ${daoObject}.insert(${dtoObject});
+        for (${dtoClassName} ${dtoObjectName}:
+        ${dtoObjectName}List) {
+        BaseDtoUtil.create(${dtoObjectName});
+        ${daoObjectName}.insert(${dtoObjectName});
         }
         return 0;
     }
 
     @Override
-    public ${dtoClass} selectByPrimaryKey(Integer id)
+    public ${dtoClassName} selectByPrimaryKey(Long id)
     {
-        ${dtoClass} ${dtoClass}=${daoObject}.selectByPrimaryKey(id);
-        return ${dtoClass};
+        ${dtoClassName} ${dtoClassName}=${daoObjectName}.selectByPrimaryKey(id);
+        return ${dtoClassName};
     }
 
     @Override
-    public List<${dtoClass}> selectAll() {
-        return ${daoObject}.selectAll();
+    public List<${dtoClassName}> selectAll() {
+        return ${daoObjectName}.selectAll();
     }
 
     @Override
-    public int updateByPrimaryKey(${dtoClass} ${dtoObject}) throws Exception
+    public int updateByPrimaryKey(${dtoClassName} ${dtoObjectName}) throws Exception
     {
-        BaseDtoUtil.update(${dtoObject});
-        int ${daoObject}Line=${daoObject}.updateByPrimaryKey(${dtoObject});
-        if(${daoObject}Line==0)
+        BaseDtoUtil.update(${dtoObjectName});
+        int ${daoObjectName}Line=${daoObjectName}.updateByPrimaryKey(${dtoObjectName});
+        if(${daoObjectName}Line==0)
         {
-        ${dtoClass} ${dtoClass}=selectByPrimaryKey(${dtoObject}.getId());
-        if (${dtoClass}==null)
+        ${dtoClassName} ${dtoClassName}=selectByPrimaryKey(${dtoObjectName}.getId());
+        if (${dtoClassName}==null)
         {
-        throw new Exception("not have the id "+${dtoObject}.getId()+",update failed");
+        throw new Exception("not have the id "+${dtoObjectName}.getId()+",update failed");
         }
-        if (${dtoObject}.getVersion()<${dtoClass}.getVersion())
+        if (${dtoObjectName}.getVersion()<${dtoClassName}.getVersion())
         {
-        throw new Exception("old version,current new version is "+${dtoClass}.getVersion()+
-        "update version is "+${dtoObject}.getVersion()+",update failed");
+        throw new Exception("old version,current new version is "+${dtoClassName}.getVersion()+
+        "update version is "+${dtoObjectName}.getVersion()+",update failed");
         }
         }
-        return ${daoObject}Line;
+        return ${daoObjectName}Line;
     }
 
     @Override
     public int deleteAll() {
-    return ${daoObject}.deleteAll();
+    return ${daoObjectName}.deleteAll();
     }
 }

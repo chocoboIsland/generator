@@ -1,0 +1,9 @@
+<select id="selectAll"  resultMap="BaseResultMap">
+
+    select * from ${tableName}
+</select>
+
+
+<delete id="deleteAll" >
+    delete from ${tableName}
+</delete>

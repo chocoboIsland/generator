@@ -1,20 +1,17 @@
 package ${servicePackage};
 
-import ${daoPackage}.${daoClass};
-import ${dtoPackage}.${dtoClass};
-import com.wangpj.platform.util.BaseDtoUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import ${dtoPackage}.${dtoClassName};
+import org.springframework.stereotype.Service;
 import java.util.List;
 @Service
-public interface ${serviceClass} {
+public interface ${serviceClassName} {
 
-    public int deleteByPrimaryKey(Integer id);
-    public int insert(${dtoClass} ${dtoObject});
-    public int insertList(List<${dtoClass}> ${dtoObject}List);
-    public ${dtoClass} selectByPrimaryKey(Integer id);
-    public List<${dtoClass}> selectAll();
-    public int updateByPrimaryKey(${dtoClass} ${dtoObject}) throws Exception;
-    public int deleteAll();
+    int deleteByPrimaryKey(Long id);
+    int insert(${dtoClassName} ${dtoObjectName});
+    int insertList(List<${dtoClassName}> ${dtoObjectName}List);
+    ${dtoClassName} selectByPrimaryKey(Long id);
+    List<${dtoClassName}> selectAll();
+    int updateByPrimaryKey(${dtoClassName} ${dtoObjectName}) throws Exception;
+    int deleteAll();
 }
