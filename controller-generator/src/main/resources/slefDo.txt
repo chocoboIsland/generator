@@ -1,1 +1,21 @@
-自己需要修改的有，在mybatis-generator生成的insert中去除id和version，正常有两个，insert和insertSelective
+自己需要修改的有，
+1、在mybatis-generator生成的insert中去除id和version，正常有两个，insert和insertSelective
+2、在dao和mapper中增加 deleteAll 和SelectAll方法，方法代码已经在模板中生成
+3、为dto加上注解@Component，为dao加上注解@Mapper
+
+
+对于brown
+1、在dao service 增加方法
+List<BrownHistoryTradeData> selectByStockCode(String stockCode);
+List<BrownHistoryTradeData> selectByStockCodeAndDate(String stockCode, Date beginDate,Date endDate);
+在mapper中增加
+  <select id="selectByStockCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+     select * from brown_history_trade_data where stock_code=#{stockCode,jdbcType=VARCHAR}
+      order by calendar_date asc
+  </select>
+
+  <select id="selectByStockCodeAndDate"  resultMap="BaseResultMap">
+     select * from brown_history_trade_data where stock_code=#{arg0,jdbcType=VARCHAR}
+      and calendar_date &gt;= #{arg1} and calendar_date &lt;= #{arg2} order by calendar_date asc
+  </select>
+

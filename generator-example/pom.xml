@@ -18,14 +18,18 @@
                 <artifactId>controller-generator</artifactId>
                 <version>1.0.1-SNAPSHOT</version>
                 <configuration>
-                    <configDir>
+                    <generatorConfigDir>
                         ${basedir}/src/main/resources/controller-generator.xml
-                    </configDir>
+                    </generatorConfigDir>
+                    <modifyConfigDir>
+                        ${basedir}/src/main/resources/modify.xml
+                    </modifyConfigDir>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>generatorMojo</goal>
+                            <goal>ModifyMojo</goal>
                         </goals>
                     </execution>
                 </executions>
