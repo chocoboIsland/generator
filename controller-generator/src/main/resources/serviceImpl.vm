@@ -71,6 +71,29 @@ public class ${serviceClassName}Impl implements ${serviceClassName} {
     }
 
     @Override
+    public int updateByPrimaryKeySelective(${dtoClassName} ${dtoObjectName})
+    {
+        BaseDtoUtil.update(${dtoObjectName});
+        int ${daoObjectName}Line=${daoObjectName}.updateByPrimaryKeySelective(${dtoObjectName});
+        if(${daoObjectName}Line==0)
+        {
+        ${dtoClassName} ${dtoClassName}=selectByPrimaryKey(${dtoObjectName}.getId());
+        if (${dtoClassName}==null)
+        {
+        throw new Exception("not have the id "+${dtoObjectName}.getId()+",update failed");
+        }
+        if (${dtoObjectName}.getVersion()<${dtoClassName}.getVersion())
+        {
+        throw new Exception("old version,current new version is "+${dtoClassName}.getVersion()+
+        "update version is "+${dtoObjectName}.getVersion()+",update failed");
+        }
+        }
+        return ${daoObjectName}Line;
+    }
+
+
+
+    @Override
     public int deleteAll() {
     return ${daoObjectName}.deleteAll();
     }
