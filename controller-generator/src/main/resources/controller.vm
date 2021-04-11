@@ -1,95 +1,71 @@
 package ${controllerPackage};
 
-import ${dtoPackage}.AjaxResponse;
 import ${dtoPackage}.${dtoClassName};
 import ${servicePackage}.${serviceClassName};
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import site.wangpj.potato.common.microservice.result.ResultModel;
+import site.wangpj.potato.common.microservice.result.ResultStatus;
+import site.wangpj.potato.common.microservice.controller.BaseController;
+import site.wangpj.potato.common.microservice.exception.MicroServiceException;
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/${domain}s")
-public class ${controllerClassName} {
+@RequestMapping("/${domainLower}")
+public class ${controllerClassName} extends BaseController {
 
     @Autowired
     ${serviceClassName} ${serviceObjectName};
 
-    @PostMapping(value = "/v1" ,produces = "application/json;charset=UTF-8" )
-    public AjaxResponse insert(@RequestBody ${dtoClassName} ${dtoObjectName})
+    @PostMapping(value = "/insert" ,produces = "application/json;charset=UTF-8" )
+    public ResultModel<String> insert(@RequestBody ${dtoClassName} ${dtoObjectName})
     {
-        ${serviceObjectName}.insert(${dtoObjectName});
-        AjaxResponse ajaxResponse=new AjaxResponse();
-        ajaxResponse.setOk(true);
-        ajaxResponse.setMessage("insert date succeed");
-        ajaxResponse.setCode(200);
-        return ajaxResponse;
+        int flag=${serviceObjectName}.insert(${dtoObjectName});
+        return this.basicResult(flag);
     }
 
-    @PostMapping(value = "/_m/v1" ,produces = "application/json;charset=UTF-8" )
-    public AjaxResponse insertList(@RequestBody List<${dtoClassName}> ${dtoObjectName}List)
+    @PostMapping(value = "/insertList" ,produces = "application/json;charset=UTF-8" )
+    public ResultModel<String> insertList(@RequestBody List<${dtoClassName}> ${dtoObjectName}List)
     {
-        ${serviceObjectName}.insertList(${dtoObjectName}List);
-        AjaxResponse ajaxResponse=new AjaxResponse();
-        ajaxResponse.setOk(true);
-        ajaxResponse.setMessage("insert "+${dtoObjectName}List.size()+" size of data");
-        ajaxResponse.setCode(200);
-        return ajaxResponse;
+        int flag=${serviceObjectName}.insertList(${dtoObjectName}List);
+        return this.basicResult(flag);
     }
 
-    @DeleteMapping(value="/v1",produces = "application/json;charset=UTF-8")
-    public AjaxResponse deleteAll()
+    @PostMapping(value="/deleteAll",produces = "application/json;charset=UTF-8")
+    public  ResultModel<String> deleteAll()
     {
-        ${serviceObjectName}.deleteAll();
-        AjaxResponse ajaxResponse=new AjaxResponse();
-        ajaxResponse.setOk(true);
-        ajaxResponse.setMessage("success");
-        ajaxResponse.setCode(200);
-        return ajaxResponse;
+        int flag=${serviceObjectName}.deleteAll();
+        return this.basicResult(flag);
     }
 
-    @PutMapping(value = "/v1",produces = "application/json;charset=UTF-8")
-    public AjaxResponse update(@RequestBody ${dtoClassName} ${dtoObjectName})
+    @PostMapping(value = "/update",produces = "application/json;charset=UTF-8")
+    public ResultModel<String> update(@RequestBody ${dtoClassName} ${dtoObjectName})
     {
-        AjaxResponse ajaxResponse=new AjaxResponse();
         try {
-        int result=${serviceObjectName}.updateByPrimaryKey(${dtoObjectName});
-        ajaxResponse.setOk(true);
-        ajaxResponse.setMessage("update success");
-        ajaxResponse.setCode(200);
-        } catch (Exception e) {
+        int flag=${serviceObjectName}.updateByPrimaryKey(${dtoObjectName});
+        return this.basicResult(flag);
+        } catch (MicroServiceException e) {
         e.printStackTrace();
-        ajaxResponse.setOk(false);
-        ajaxResponse.setMessage(e.getMessage());
-        ajaxResponse.setCode(400);
+        ResultModel<String> resultModel= ResultModel.defaultError(e.getMessage());
+        resultModel.addCause(e);
+        return resultModel;
         }
-        return ajaxResponse;
     }
 
-    @GetMapping(value="/id/{id}/v1",produces = "application/json;charset=UTF-8")
-    public AjaxResponse searchById(@PathVariable long id)
+    @GetMapping(value="/searchById/{id}",produces = "application/json;charset=UTF-8")
+    public ResultModel<${dtoClassName}> searchById(@PathVariable("id") long id)
     {
-    ${dtoClassName} broker=${serviceObjectName}.selectByPrimaryKey(id);
-    AjaxResponse ajaxResponse=new AjaxResponse();
-    ajaxResponse.setOk(true);
-    ajaxResponse.setMessage("search success");
-    ajaxResponse.setCode(200);
-    ajaxResponse.setData(broker);
-    return ajaxResponse;
+        ${dtoClassName} dto=${serviceObjectName}.selectByPrimaryKey(id);
+        return new ResultModel<>(ResultStatus.SUCCESS,dto);
     }
 
-    @GetMapping(value="/v1",produces = "application/json;charset=UTF-8")
-    public AjaxResponse searchAll()
+    @GetMapping(value="/serachAll",produces = "application/json;charset=UTF-8")
+    public  ResultModel<List<${dtoClassName}>> searchAll()
     {
         List<${dtoClassName}> ${dtoObjectName}List=${serviceObjectName}.selectAll();
         int size=${dtoObjectName}List.size();
-        AjaxResponse ajaxResponse=new AjaxResponse();
-        ajaxResponse.setOk(true);
-        ajaxResponse.setMessage("search success,all "+size+" size of data");
-        ajaxResponse.setCode(200);
-        ajaxResponse.setData(${dtoObjectName}List);
-        return ajaxResponse;
+        return new ResultModel<>(ResultStatus.SUCCESS,${dtoObjectName}List);
     }
 }

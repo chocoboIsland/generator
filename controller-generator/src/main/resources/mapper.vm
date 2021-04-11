@@ -3,7 +3,34 @@
     select * from ${tableName}
 </select>
 
+<select id="selectSensitivity" parameterType="${dtoPackage}.${dtoClassName}"
+        resultMap="BaseResultMap" >
+    select * from ${tableName}
+    <where>
+        <if test="createdBy != null">
+            created_by = #{createdBy,jdbcType=BIGINT}
+        </if>
+        <if test="createdIp != null">
+            and created_ip = #{createdIp,jdbcType=INTEGER}
+        </if>
+        <if test="createdDate != null">
+            and created_date = #{createdDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="lastUpdatedBy != null">
+            and last_updated_by = #{lastUpdatedBy,jdbcType=BIGINT}
+        </if>
+        <if test="lastUpdatedIp != null">
+            and last_updated_ip = #{lastUpdatedIp,jdbcType=INTEGER}
+        </if>
+        <if test="lastUpdatedDate != null">
+            and last_updated_date = #{lastUpdatedDate,jdbcType=TIMESTAMP}
+        </if>
+    </where>
+</select>
+
+
 
 <delete id="deleteAll" >
     delete from ${tableName}
 </delete>
+

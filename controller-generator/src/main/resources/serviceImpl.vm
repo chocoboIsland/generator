@@ -1,17 +1,18 @@
-package ${servicePackage}.impl;
+package ${serviceImplPackage};
 
 import ${daoPackage}.${daoClassName};
 import ${dtoPackage}.${dtoClassName};
 import ${servicePackage}.${serviceClassName};
-import com.wangpj.platform.util.BaseDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import site.wangpj.potato.common.microservice.exception.VersionInvaildException;
+import site.wangpj.potato.common.microservice.exception.NoSuchIdException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
 public class ${serviceClassName}Impl implements ${serviceClassName} {
 
-    @Autowired
+    @Autowired(required = false)
     ${daoClassName} ${daoObjectName};
 
 @Override
@@ -22,7 +23,7 @@ public class ${serviceClassName}Impl implements ${serviceClassName} {
     @Override
     public int insert(${dtoClassName} ${dtoObjectName})
     {
-        BaseDtoUtil.create(${dtoObjectName});
+        ${dtoObjectName}.updateFieldWhenCreate();
         return ${daoObjectName}.insert(${dtoObjectName});
     }
 
@@ -31,7 +32,7 @@ public class ${serviceClassName}Impl implements ${serviceClassName} {
     {
         for (${dtoClassName} ${dtoObjectName}:
         ${dtoObjectName}List) {
-        BaseDtoUtil.create(${dtoObjectName});
+        ${dtoObjectName}.updateFieldWhenCreate();
         ${daoObjectName}.insert(${dtoObjectName});
         }
         return 0;
@@ -50,22 +51,19 @@ public class ${serviceClassName}Impl implements ${serviceClassName} {
     }
 
     @Override
-    public int updateByPrimaryKey(${dtoClassName} ${dtoObjectName}) throws Exception
+    public List<${dtoClassName}> selectSensitivity(${dtoClassName} ${dtoObjectName})
     {
-        BaseDtoUtil.update(${dtoObjectName});
+        return ${daoObjectName}.selectSensitivity(${dtoObjectName});
+    }
+
+    @Override
+    public int updateByPrimaryKey(${dtoClassName} ${dtoObjectName})
+    {
+        ${dtoObjectName}.updateFieldWhenUpdate();
         int ${daoObjectName}Line=${daoObjectName}.updateByPrimaryKey(${dtoObjectName});
         if(${daoObjectName}Line==0)
         {
-        ${dtoClassName} ${dtoClassName}=selectByPrimaryKey(${dtoObjectName}.getId());
-        if (${dtoClassName}==null)
-        {
-        throw new Exception("not have the id "+${dtoObjectName}.getId()+",update failed");
-        }
-        if (${dtoObjectName}.getVersion()<${dtoClassName}.getVersion())
-        {
-        throw new Exception("old version,current new version is "+${dtoClassName}.getVersion()+
-        "update version is "+${dtoObjectName}.getVersion()+",update failed");
-        }
+            diagnoseUpdateError(${dtoObjectName});
         }
         return ${daoObjectName}Line;
     }
@@ -73,22 +71,28 @@ public class ${serviceClassName}Impl implements ${serviceClassName} {
     @Override
     public int updateByPrimaryKeySelective(${dtoClassName} ${dtoObjectName})
     {
-        BaseDtoUtil.update(${dtoObjectName});
+        ${dtoObjectName}.updateFieldWhenUpdate();
         int ${daoObjectName}Line=${daoObjectName}.updateByPrimaryKeySelective(${dtoObjectName});
         if(${daoObjectName}Line==0)
         {
-        ${dtoClassName} ${dtoClassName}=selectByPrimaryKey(${dtoObjectName}.getId());
-        if (${dtoClassName}==null)
-        {
-        throw new Exception("not have the id "+${dtoObjectName}.getId()+",update failed");
-        }
-        if (${dtoObjectName}.getVersion()<${dtoClassName}.getVersion())
-        {
-        throw new Exception("old version,current new version is "+${dtoClassName}.getVersion()+
-        "update version is "+${dtoObjectName}.getVersion()+",update failed");
-        }
+            diagnoseUpdateError(${dtoObjectName});
         }
         return ${daoObjectName}Line;
+    }
+
+    //诊断更新错误的原因
+    private void diagnoseUpdateError(${dtoClassName} oldDto)
+    {
+        ${dtoClassName} selectDto = selectByPrimaryKey(oldDto.getId());
+        if (selectDto==null)
+        {
+             throw new NoSuchIdException("not have the id "+selectDto.getId()+",update failed");
+        }
+        if (oldDto.getVersion()<selectDto.getVersion())
+        {
+            throw new VersionInvaildException("old version,current new version is "+selectDto.getVersion()+
+            "update version is "+oldDto.getVersion()+",update failed");
+        }
     }
 
 

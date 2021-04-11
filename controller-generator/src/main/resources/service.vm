@@ -2,9 +2,8 @@ package ${servicePackage};
 
 
 import ${dtoPackage}.${dtoClassName};
-import org.springframework.stereotype.Service;
+//import org.springframework.stereotype.Service;
 import java.util.List;
-@Service
 public interface ${serviceClassName} {
 
     int deleteByPrimaryKey(Long id);
@@ -12,7 +11,8 @@ public interface ${serviceClassName} {
     int insertList(List<${dtoClassName}> ${dtoObjectName}List);
     ${dtoClassName} selectByPrimaryKey(Long id);
     List<${dtoClassName}> selectAll();
-    int updateByPrimaryKey(${dtoClassName} ${dtoObjectName}) throws Exception;
+    List<${dtoClassName}> selectSensitivity(${dtoClassName} ${dtoObjectName});
+    int updateByPrimaryKey(${dtoClassName} ${dtoObjectName});
     int deleteAll();
     int updateByPrimaryKeySelective(${dtoClassName} ${dtoObjectName});
 }
