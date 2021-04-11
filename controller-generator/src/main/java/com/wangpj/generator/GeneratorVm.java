@@ -4,6 +4,7 @@ import com.wangpj.generator.util.FieldUtil;
 import com.wangpj.generator.util.FileUtil;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
@@ -25,7 +26,7 @@ public class GeneratorVm {
     public void createVm() throws Exception
     {
         Map<String,String> configMap=readConfigXml.getConfig();
-        String basePackage=configMap.get("basePackage");//基础包
+        String basePackage=configMap.get("basePackage");//基础包*/
         String allDomainName=configMap.get("domainName");
         List<String> domainNamesList=Arrays.asList(allDomainName.split(","));
         domainNamesList=domainNamesList.stream().filter(s -> s!=null&&s.length()!=0).collect(Collectors.toList());
@@ -36,15 +37,19 @@ public class GeneratorVm {
 
 
         String controllerPackage=basePackage+".controller";//controller包名
-        String servicePackage=basePackage+".service";//service包名
+        String servicePackage=basePackage+".api.service";//service接口包名
+        String serviceImplPackage=basePackage+".service.impl";//service实现类名
         String daoPackage=basePackage+"."+daoSubPackage;//dao包名
-        String dtoPackage=basePackage+"."+dtoSubPackage;//dto报名
+        String dtoPackage=basePackage+".api."+dtoSubPackage;//dto报名
 
 
 
         VelocityEngine ve = new VelocityEngine();
         ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
         ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+        ve.setProperty(Velocity.ENCODING_DEFAULT, "UTF-8");
+        ve.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
+        ve.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
         ve.init();
         // 获取模板文件
         Template template;
@@ -54,6 +59,7 @@ public class GeneratorVm {
         VelocityContext ctx = new VelocityContext();
         ctx.put("controllerPackage", controllerPackage);
         ctx.put("servicePackage", servicePackage);
+        ctx.put("serviceImplPackage",serviceImplPackage);
         ctx.put("daoPackage", daoPackage);
         ctx.put("dtoPackage", dtoPackage);
 
@@ -79,6 +85,7 @@ public class GeneratorVm {
             ctx.put("dtoClassName",domainNameUp);
             ctx.put("dtoObjectName",domainNameLower);
             ctx.put("domain",domainName);
+            ctx.put("domainLower",domainNameLower);
             ctx.put("tableName",FieldUtil.change2DatabaseTableName(domainName));
 
             for (String vmItem:
