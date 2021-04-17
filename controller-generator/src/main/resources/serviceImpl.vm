@@ -1,5 +1,6 @@
 package ${serviceImplPackage};
 
+import site.wangpj.potato.common.microservice.BaseService;
 import ${daoPackage}.${daoClassName};
 import ${dtoPackage}.${dtoClassName};
 import ${servicePackage}.${serviceClassName};
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class ${serviceClassName}Impl implements ${serviceClassName} {
+public class ${serviceClassName}Impl extends BaseService implements ${serviceClassName} {
 
     @Autowired(required = false)
     ${daoClassName} ${daoObjectName};
@@ -23,7 +24,7 @@ public class ${serviceClassName}Impl implements ${serviceClassName} {
     @Override
     public int insert(${dtoClassName} ${dtoObjectName})
     {
-        ${dtoObjectName}.updateFieldWhenCreate();
+        updateFieldWhenCreate(${dtoObjectName});
         return ${daoObjectName}.insert(${dtoObjectName});
     }
 
@@ -32,7 +33,7 @@ public class ${serviceClassName}Impl implements ${serviceClassName} {
     {
         for (${dtoClassName} ${dtoObjectName}:
         ${dtoObjectName}List) {
-        ${dtoObjectName}.updateFieldWhenCreate();
+        updateFieldWhenCreate(${dtoObjectName});
         ${daoObjectName}.insert(${dtoObjectName});
         }
         return 0;
@@ -59,7 +60,7 @@ public class ${serviceClassName}Impl implements ${serviceClassName} {
     @Override
     public int updateByPrimaryKey(${dtoClassName} ${dtoObjectName})
     {
-        ${dtoObjectName}.updateFieldWhenUpdate();
+        updateFieldWhenCreate(${dtoObjectName});
         int ${daoObjectName}Line=${daoObjectName}.updateByPrimaryKey(${dtoObjectName});
         if(${daoObjectName}Line==0)
         {
@@ -71,7 +72,7 @@ public class ${serviceClassName}Impl implements ${serviceClassName} {
     @Override
     public int updateByPrimaryKeySelective(${dtoClassName} ${dtoObjectName})
     {
-        ${dtoObjectName}.updateFieldWhenUpdate();
+        updateFieldWhenCreate(${dtoObjectName});
         int ${daoObjectName}Line=${daoObjectName}.updateByPrimaryKeySelective(${dtoObjectName});
         if(${daoObjectName}Line==0)
         {
