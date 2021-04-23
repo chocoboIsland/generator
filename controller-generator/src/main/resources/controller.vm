@@ -40,6 +40,13 @@ public class ${controllerClassName} extends BaseController {
         return this.basicResult(flag);
     }
 
+    @PostMapping(value = "/deleteById/{id}",produces = "application/json;charset=UTF-8")
+    public ResultModel<String> deleteById(@PathVariable("id") long id)
+    {
+    int flag = ${serviceObjectName}.deleteByPrimaryKey(id);
+    return this.basicResult(flag);
+    }
+
     @PostMapping(value = "/update",produces = "application/json;charset=UTF-8")
     public ResultModel<String> update(@RequestBody ${dtoClassName} ${dtoObjectName})
     {
@@ -49,7 +56,6 @@ public class ${controllerClassName} extends BaseController {
         } catch (MicroServiceException e) {
         e.printStackTrace();
         ResultModel<String> resultModel= ResultModel.defaultError(e.getMessage());
-        resultModel.addCause(e);
         return resultModel;
         }
     }
@@ -67,5 +73,12 @@ public class ${controllerClassName} extends BaseController {
         List<${dtoClassName}> ${dtoObjectName}List=${serviceObjectName}.selectAll();
         int size=${dtoObjectName}List.size();
         return new ResultModel<>(ResultStatus.SUCCESS,${dtoObjectName}List);
+    }
+
+    @RequestMapping(value = "/searchSensitivity",produces = "application/json;charset=UTF-8")
+    public  ResultModel<List<${dtoClassName}>> selectSensitivity(@RequestBody ${dtoClassName} ${dtoObjectName})
+    {
+        List<${dtoClassName}> ${dtoObjectName}List = ${serviceObjectName}.selectSensitivity(${dtoObjectName});
+        return new ResultModel<>(ResultStatus.SUCCESS, ${dtoObjectName}List);
     }
 }
